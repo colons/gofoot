@@ -7,16 +7,16 @@ import (
 
 var woofMatch *regexp.Regexp
 
-type Woof struct {}
+type WoofCommand struct {}
 
-func (p Woof) Initialize() {
+func (c WoofCommand) Initialize() {
 	woofMatch = regexp.MustCompile(".*\\b(woof)\\b.*")
 }
 
-func (p Woof) ShouldHandle(e *irc.Event) bool {
+func (c WoofCommand) ShouldHandle(e *irc.Event) bool {
 	return woofMatch.MatchString(e.Message)
 }
 
-func (p Woof) Handle(e *irc.Event) {
+func (c WoofCommand) Handle(e *irc.Event) {
 	Con.Privmsg(getTarget(e), "woof")
 }

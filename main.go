@@ -23,7 +23,9 @@ var Con *irc.Connection
 func main() {
 	TheConfig = GetConfig()
 	Con = irc.IRC(TheConfig.Nick, TheConfig.User)
-	commands := []Command{Woof{}}
+	commands := []Command{
+		WoofCommand{}, HttpCommand{},
+	}
 
 	Con.AddCallback("001", func(e *irc.Event) {
 		for i := 0; i < len(TheConfig.Rooms); i++ {

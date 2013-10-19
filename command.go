@@ -1,6 +1,9 @@
 package main
 
-import "github.com/thoj/go-ircevent"
+import (
+	"github.com/thoj/go-ircevent"
+	"strings"
+)
 
 type Command interface {
 	Initialize()
@@ -17,4 +20,9 @@ func getTarget(e *irc.Event) (target string) {
 		}
 	}
 	return
+}
+
+// Send a list of strings to target in a nicely formatted way
+func sendStuff(target string, stuff []string) {
+	Con.Privmsg(target, strings.Join(stuff, " \x034|\x03 "))
 }
