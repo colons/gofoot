@@ -17,6 +17,6 @@ func (p Woof) ShouldHandle(e *irc.Event) bool {
 	return woofMatch.MatchString(e.Message)
 }
 
-func (p Woof) Handle(con *irc.Connection, e *irc.Event) {
-	con.Privmsg(getTarget(e), "woof")
+func (p Woof) Handle(e *irc.Event) {
+	Con.Privmsg(getTarget(e), "woof")
 }
