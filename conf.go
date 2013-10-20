@@ -37,11 +37,16 @@ func (c config) Network(key string) string {
 	}
 }
 
-// Get config for key applying to the target for whom event was issued
-func (c config) Event(event *irc.Event, key string) string {
-	if value, ok := c.userConfig.channel[c.ourNetwork][getTarget(event)][key]; ok {
+func (c config) Source(source string, key string) string {
+	if value, ok := c.userConfig.channel[c.ourNetwork][source][key]; ok {
 		return value
 	} else {
 		return c.Network(key)
 	}
+}
+
+
+// Get config for key applying to the target for whom event was issued
+func (c config) Event(event *irc.Event, key string) string {
+	return c.Source(getTarget(event), key)
 }

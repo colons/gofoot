@@ -10,13 +10,13 @@ import (
 )
 
 type Corpus struct {
-	Text []string;
-	Wrapper string;
+	Text []string
+	Wrapper string
 }
 
 type RantextCommand struct {
-	ArgCommand;
-	*Corpus;
+	ArgCommand
+	*Corpus
 }
 
 func Rantext() (rantexts []CommandInterface) {

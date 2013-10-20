@@ -31,7 +31,7 @@ func main() {
 
 	// initialize commands
 	Commands = []CommandInterface{
-		HelpQuery(), Woof(), Http(), Konata(),
+		About(), Help(), Woof(), Http(), Konata(),
 	}
 	Commands = append(Commands, Rantext()...)
 

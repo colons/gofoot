@@ -14,8 +14,8 @@ type CommandInterface interface {
 
 
 type ArgCommand struct {
-	Args []string;
-	docs string;
+	Args []string
+	docs string
 }
 
 

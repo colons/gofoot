@@ -7,8 +7,8 @@ import (
 
 
 type KonataCommand struct {
-	ArgCommand;
-	KonataArray [4]string;
+	ArgCommand
+	KonataArray [4]string
 }
 
 func Konata() KonataCommand {
