@@ -14,7 +14,7 @@ func HelpQuery() HelpQueryCommand {
 	return HelpQueryCommand{
 		ArgCommand{
 			Args: []string{"help", "[query]"},
-			docs: "Get information about a particular command.",
+			docs: "Gets information about a particular command.",
 		},
 	}
 }
