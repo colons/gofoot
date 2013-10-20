@@ -1,0 +1,28 @@
+// An example config. Copy to config.go and modify to taste.
+
+package main
+
+func GetUserConfig() UserConfig {
+	return UserConfig{
+		global: map[string]string {
+			"nick": "gofoot",
+			"user": "gofoot",
+      "comchar": "!",
+		},
+		network: map[string]map[string]string {
+			"highway": map[string]string {
+				"address": "irc.irchighway.net:6669",
+				"rooms": "#channel_a,#a_channel",
+			},
+		},
+		channel: map[string]map[string]map[string]string {
+			"highway": map[string]map[string]string {
+				"#a_channel": {
+          // if there's a robot in this channel that already uses !,
+          // we might want to use + for this channel alone
+					"comchar": "+",
+				},
+			},
+		},
+	}
+}

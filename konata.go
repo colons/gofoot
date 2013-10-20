@@ -26,6 +26,6 @@ func Konata() KonataCommand {
 func (c KonataCommand) Handle(e *irc.Event) {
 	otaku := c.argsForCommand(e.Message)["otaku"]
 	for _, k := range(c.KonataArray) {
-		Con.Privmsg(getTarget(e), strings.Replace(k, "konata", otaku, -1))
+		Connection.Privmsg(getTarget(e), strings.Replace(k, "konata", otaku, -1))
 	}
 }

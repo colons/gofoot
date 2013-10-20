@@ -88,5 +88,5 @@ func (c RantextCommand) Handle(e *irc.Event) {
 		message = fmt.Sprintf("%s", c.Corpus.Choice())
 	}
 
-	Con.Privmsg(getTarget(e), message)
+	Connection.Privmsg(getTarget(e), message)
 }

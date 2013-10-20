@@ -35,7 +35,7 @@ func (c HttpCommand) Handle(e *irc.Event) {
 	for _, url := range urls {
 		metadata := metadataForUrl(url)
 		if metadata != nil {
-			sendStuff(getTarget(e), metadata)
+			Connection.Privmsg(getTarget(e), prettyStuff(metadata))
 		}
 	}
 }

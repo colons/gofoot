@@ -23,13 +23,13 @@ func (c HelpQueryCommand) Handle(e *irc.Event) {
 	for _, command := range(argCommands) {
 		argCommand := argCommandFor(command)
 
-		if argCommand.ShouldHandleMessage(query, false) {
-			humanReadableArgs := "!" + strings.Join(argCommand.Args, " ")
+		if argCommand.ShouldHandleMessage(e, query, false) {
+			humanReadableArgs := Config.Event(e, "comchar") + strings.Join(argCommand.Args, " ")
 			relaventCommands = append(relaventCommands, humanReadableArgs)
 		}
 	}
 
 	if len(relaventCommands) > 0 {
-		sendStuff(getTarget(e), relaventCommands)
+		Connection.Privmsg(getTarget(e), prettyStuff(relaventCommands))
 	}
 }

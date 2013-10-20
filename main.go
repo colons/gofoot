@@ -7,38 +7,55 @@ import (
 	"reflect"
 	"math/rand"
 	"time"
+	"os"
 )
 
 const (
 	VERSION = "gofoot"
+	USAGE = "gofoot robot <network>"
 )
 
-type Config struct {
-	// define GetConfig to return one of these
-	Rooms []string
-	Nick string
-	User string
-	Addr string
-}
-
-var TheConfig Config
-var Con *irc.Connection
+var Connection *irc.Connection
 var argCommands []CommandInterface
 var unmanagedCommands []CommandInterface
+var Config config
 
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
-	TheConfig = GetConfig()
-	Con = irc.IRC(TheConfig.Nick, TheConfig.User)
+
+	if len(os.Args) < 2 {
+		fmt.Println(USAGE)
+		return
+	}
+
+	switch mode := os.Args[1]; mode {
+	case "robot":
+		if len(os.Args) < 3 {
+			fmt.Println(USAGE)
+			return
+		} else {
+			network := os.Args[2]
+			RunRobot(network)
+		}
+	// XXX case "server":
+	}
+}
+
+func RunRobot(network string) {
+	Config = GetConfig(network)
+
+	if Config.Network("address") == "" {
+		fmt.Println("No address configured.")
+		return
+	}
+
+	Connection = irc.IRC(Config.Network("nick"), Config.Network("user"))
 
 	commands := []CommandInterface{
 		HelpQuery(), Woof(), Http(), Konata(),
 	}
 
 	commands = append(commands, Rantext()...)
-
-	argCommands = []CommandInterface{}
-	unmanagedCommands = []CommandInterface{}
 
 	for _, command := range(commands) {
 		if (reflect.ValueOf(command).FieldByName("ArgCommand") == reflect.Value{}) {
@@ -48,65 +65,26 @@ func main() {
 		}
 	}
 
-	Con.AddCallback("001", func(e *irc.Event) {
-		for _, room := range(TheConfig.Rooms) {
-			Con.Join(room)
+	Connection.AddCallback("001", func(e *irc.Event) {
+		rooms := strings.Split(Config.Network("rooms"), ",")
+
+		for _, room := range(rooms) {
+			Connection.Join(room)
 		}
 	})
 
-	Con.ReplaceCallback("CTCP_VERSION", 0, func(e *irc.Event) {
-		Con.SendRawf("NOTICE %s :\x01VERSION %s\x01", e.Nick, VERSION)
+	Connection.ReplaceCallback("CTCP_VERSION", 0, func(e *irc.Event) {
+		Connection.SendRawf("NOTICE %s :\x01VERSION %s\x01", e.Nick, VERSION)
 	})
 
-	Con.AddCallback("PRIVMSG", handleArgCommands)
-	Con.AddCallback("PRIVMSG", handleUnmanagedCommands)
+	Connection.AddCallback("PRIVMSG", handleArgCommands)
+	Connection.AddCallback("PRIVMSG", handleUnmanagedCommands)
 
-
-	err := Con.Connect(TheConfig.Addr)
+	err := Connection.Connect(Config.Network("address"))
 	if err != nil {
-		fmt.Printf("Failed to connect to %s: %s", TheConfig.Addr, err)
+		fmt.Printf("Failed to connect to %s: %s", Config.Network("address"), err)
 		return
 	}
 
-	Con.Loop()
-}
-
-
-// Return a Command's ArgCommand field after asserting that it is an ArgCommand
-func argCommandFor(command CommandInterface) ArgCommand {
-	return reflect.ValueOf(command).FieldByName("ArgCommand").Interface().(ArgCommand)
-}
-
-
-func handleArgCommands(e *irc.Event) {
-	handlers := []CommandInterface{}
-
-	for _, command := range(argCommands) {
-		if command.ShouldHandle(e) {
-			handlers = append(handlers, command)
-		}
-	}
-
-	switch matches := len(handlers); matches {
-	case 1:
-		handlers[0].Handle(e)
-	case 0:
-		// no handlers :<
-	default:
-		disambiguator := []string{}
-		for _, command := range(handlers) {
-			args := argCommandFor(command).Args
-			disambiguator = append(disambiguator, "!" + strings.Join(args, " "))
-		}
-		sendNestedStuff(getTarget(e), [][]string{[]string{"\x02ambiguous command\x02"}, disambiguator})
-	}
-}
-
-
-func handleUnmanagedCommands(e *irc.Event) {
-	for _, command := range(unmanagedCommands) {
-		if command.ShouldHandle(e) {
-			command.Handle(e)
-		}
-	}
+	Connection.Loop()
 }

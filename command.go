@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/thoj/go-ircevent"
 	"strings"
+	"reflect"
 )
 
 type CommandInterface interface {
@@ -10,9 +11,11 @@ type CommandInterface interface {
 	ShouldHandle(*irc.Event) bool
 }
 
+
 type ArgCommand struct {
 	Args []string;
 }
+
 
 // take a message and split it into as many chunks as we expect args
 func splitArgs(c ArgCommand, message string) []string {
@@ -20,9 +23,11 @@ func splitArgs(c ArgCommand, message string) []string {
 	return strings.SplitN(strippedMessage, " ", len(c.Args))
 }
 
+
 func argIsVariable(arg string) bool {
 	return strings.HasPrefix(arg, "[") && strings.HasSuffix(arg, "]")
 }
+
 
 // return the indeces of arguments we want to hand to handlers;
 // for instance, a command with args
@@ -47,16 +52,19 @@ func (c ArgCommand) indecesOfSyntaxArguments() (interesting []int) {
 	return
 }
 
+
 func (c ArgCommand) ShouldHandle(e *irc.Event) bool {
-	if !strings.HasPrefix(e.Message, "!") {
+	if !strings.HasPrefix(e.Message, Config.Event(e, "comchar")) {
 		return false
 	}
 
-	return c.ShouldHandleMessage(e.Message, true)
+	return c.ShouldHandleMessage(e, e.Message, true)
 }
 
-func (c ArgCommand) ShouldHandleMessage(message string, requireAllArguments bool) bool {
-	userCommand := strings.TrimPrefix(message, "!")
+
+// Decide whether we should handle message. Takes an irc.Event for config's sake
+func (c ArgCommand) ShouldHandleMessage(e *irc.Event, message string, requireAllArguments bool) bool {
+	userCommand := strings.TrimPrefix(message, Config.Event(e, "comchar"))
 
 	split := splitArgs(c, userCommand)
 	interesting := c.indecesOfSyntaxArguments()
@@ -93,4 +101,46 @@ func (c ArgCommand) argsForCommand(command string) (args map[string]string) {
 	}
 
 	return
+}
+
+
+// Return a Command's ArgCommand field after asserting that it is an ArgCommand
+func argCommandFor(command CommandInterface) ArgCommand {
+	return reflect.ValueOf(command).FieldByName("ArgCommand").Interface().(ArgCommand)
+}
+
+
+func handleArgCommands(e *irc.Event) {
+	handlers := []CommandInterface{}
+
+	for _, command := range(argCommands) {
+		if command.ShouldHandle(e) {
+			handlers = append(handlers, command)
+		}
+	}
+
+	switch matches := len(handlers); matches {
+	case 1:
+		handlers[0].Handle(e)
+	case 0:
+		// no handlers :<
+	default:
+		disambiguator := []string{}
+		for _, command := range(handlers) {
+			args := argCommandFor(command).Args
+			disambiguator = append(disambiguator, "!" + strings.Join(args, " "))
+		}
+
+		pretty := prettyNestedStuff([][]string{[]string{"\x02ambiguous command\x02"}, disambiguator})
+		Connection.Privmsg(getTarget(e), pretty)
+	}
+}
+
+
+func handleUnmanagedCommands(e *irc.Event) {
+	for _, command := range(unmanagedCommands) {
+		if command.ShouldHandle(e) {
+			command.Handle(e)
+		}
+	}
 }

@@ -20,5 +20,5 @@ func (c WoofCommand) ShouldHandle(e *irc.Event) bool {
 }
 
 func (c WoofCommand) Handle(e *irc.Event) {
-	Con.Privmsg(getTarget(e), "woof")
+	Connection.Privmsg(getTarget(e), "woof")
 }
