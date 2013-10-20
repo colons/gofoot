@@ -17,7 +17,16 @@ func getTarget(event *irc.Event) (target string) {
 	return
 }
 
-// Send a list of strings to target in a nicely formatted way
+// Send stuff to target in a nicely formatted way
+func sendNestedStuff(target string, stuff [][]string) {
+	subStuff := []string{}
+	for _, thing := range(stuff) {
+		subStuff = append(subStuff, strings.Join(thing, " \x034:\x03 "))
+	}
+	Con.Privmsg(target, strings.Join(subStuff, " \x034|\x03 "))
+}
+
+// Send stuff to target in a nicely formatted way
 func sendStuff(target string, stuff []string) {
 	Con.Privmsg(target, strings.Join(stuff, " \x034|\x03 "))
 }

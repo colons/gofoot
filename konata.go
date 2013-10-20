@@ -13,7 +13,7 @@ type KonataCommand struct {
 
 func Konata() KonataCommand {
 	instance := KonataCommand{
-		ArgCommand{Args: []string{"konata", "[nick]"}},
+		ArgCommand{Args: []string{"konata", "[otaku]"}},
 		[4]string{
 			"I like konata because she is a otaku like me, except she has friends. Oh god I wish I had friends too ;_;",
 			"konata also likes videogames and she is kawaii. And there are lesbians in the show and that's good because I like lesbians and I will never have a girlfriend. Why am I such a loser?!",
@@ -24,13 +24,9 @@ func Konata() KonataCommand {
 	return instance
 }
 
-func (c KonataCommand) ShouldHandle(e *irc.Event) bool {
-	return argCommandShouldHandle(c.ArgCommand, e)
-}
-
 func (c KonataCommand) Handle(e *irc.Event) {
-	nick := c.argsForCommand(e.Message)["nick"]
+	otaku := c.argsForCommand(e.Message)["otaku"]
 	for _, k := range(c.KonataArray) {
-		Con.Privmsg(getTarget(e), strings.Replace(k, "konata", nick, -1))
+		Con.Privmsg(getTarget(e), strings.Replace(k, "konata", otaku, -1))
 	}
 }

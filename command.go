@@ -47,7 +47,7 @@ func (c ArgCommand) indecesOfSyntaxArguments() (interesting []int) {
 	return
 }
 
-func argCommandShouldHandle(c ArgCommand, e *irc.Event) (bool) {
+func (c ArgCommand) ShouldHandle(e *irc.Event) (bool) {
 	if !strings.HasPrefix(e.Message, "!") {
 		return false
 	}
@@ -57,9 +57,13 @@ func argCommandShouldHandle(c ArgCommand, e *irc.Event) (bool) {
 	split := splitArgs(c, userCommand)
 	interesting := c.indecesOfSyntaxArguments()
 
-	for _, interestingIndex := range interesting {
-		expected := c.Args[interestingIndex]
-		if split[interestingIndex] != expected {
+	if len(split) != len(c.Args) {
+		return false
+	}
+
+	for _, i := range interesting {
+		expected := c.Args[i]
+		if !strings.HasPrefix(expected, split[i]) {
 			return false
 		}
 	}
