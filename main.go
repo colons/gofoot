@@ -32,7 +32,7 @@ func main() {
 	Con = irc.IRC(TheConfig.Nick, TheConfig.User)
 
 	commands := []CommandInterface{
-		Woof(), Http(), Konata(),
+		HelpQuery(), Woof(), Http(), Konata(),
 	}
 
 	commands = append(commands, Rantext()...)
@@ -76,6 +76,7 @@ func main() {
 func argCommandFor(command CommandInterface) ArgCommand {
 	return reflect.ValueOf(command).FieldByName("ArgCommand").Interface().(ArgCommand)
 }
+
 
 func handleArgCommands(e *irc.Event) {
 	handlers := []CommandInterface{}

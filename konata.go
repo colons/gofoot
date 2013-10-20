@@ -12,7 +12,7 @@ type KonataCommand struct {
 }
 
 func Konata() KonataCommand {
-	instance := KonataCommand{
+	return KonataCommand{
 		ArgCommand{Args: []string{"konata", "[otaku]"}},
 		[4]string{
 			"I like konata because she is a otaku like me, except she has friends. Oh god I wish I had friends too ;_;",
@@ -21,7 +21,6 @@ func Konata() KonataCommand {
 			"We would play videogames all day and watch Naruto and other cool animes on TV, and I would have sex with her because sex is so good. I wish I could have sex with a girl",
 		},
 	}
-	return instance
 }
 
 func (c KonataCommand) Handle(e *irc.Event) {

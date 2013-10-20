@@ -47,18 +47,24 @@ func (c ArgCommand) indecesOfSyntaxArguments() (interesting []int) {
 	return
 }
 
-func (c ArgCommand) ShouldHandle(e *irc.Event) (bool) {
+func (c ArgCommand) ShouldHandle(e *irc.Event) bool {
 	if !strings.HasPrefix(e.Message, "!") {
 		return false
 	}
 
-	userCommand := strings.TrimPrefix(e.Message, "!")
+	return c.ShouldHandleMessage(e.Message, true)
+}
+
+func (c ArgCommand) ShouldHandleMessage(message string, requireAllArguments bool) bool {
+	userCommand := strings.TrimPrefix(message, "!")
 
 	split := splitArgs(c, userCommand)
 	interesting := c.indecesOfSyntaxArguments()
 
-	if len(split) != len(c.Args) {
-		return false
+	if requireAllArguments {
+		if len(split) != len(c.Args) {
+			return false
+		}
 	}
 
 	for _, i := range interesting {
@@ -70,6 +76,7 @@ func (c ArgCommand) ShouldHandle(e *irc.Event) (bool) {
 
 	return true
 }
+
 
 // Return a map of variable arguments to their value in a given use.
 // In our example, return {"from": "fr", "to": "en", "query": "bonbon hahah"}
