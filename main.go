@@ -17,9 +17,11 @@ var Connection *irc.Connection
 var argCommands []CommandInterface
 var unmanagedCommands []CommandInterface
 var Commands []CommandInterface
+var GlobalConfig config
 var Config config
 
 func main() {
+	GlobalConfig = GetConfig("")
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	if len(os.Args) < 2 {
@@ -56,4 +58,3 @@ func main() {
 		RunServer()
 	}
 }
-

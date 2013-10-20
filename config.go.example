@@ -13,6 +13,9 @@ func GetUserConfig() UserConfig {
 
 			// listen address for the help server
 			"listen": "localhost:4321"
+
+			// plugin-specific stuff
+			"rantext_sources": "jerkcity,troll"
 		},
 		network: map[string]map[string]string {
 			"highway": map[string]string {

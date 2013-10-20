@@ -21,7 +21,11 @@ func GetConfig(network string) config {
 
 // get config for key applying globally
 func (c config) Global(key string) string {
-	return c.userConfig.global[key]
+	if value, ok := c.userConfig.global[key]; ok {
+		return value
+	} else {
+		return GlobalConfig.Global(key)
+	}
 }
 
 // get config for key applying to the attached network

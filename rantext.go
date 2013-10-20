@@ -20,12 +20,18 @@ type RantextCommand struct {
 }
 
 func Rantext() (rantexts []CommandInterface) {
-	sources := map[string]string{
+	wrappers := map[string]string{
 		"jerkcity": "\x02%s\x02",
 		"troll": "\x0304,08%s\x03",
 	}
 
-	for source, wrapper := range(sources) {
+	sources := strings.Split(Config.Global("rantext_sources"), ",")
+
+	for _, source := range(sources) {
+		wrapper := wrappers[source]
+		if wrapper == "" {
+			wrapper = "%s"
+		}
 		corpus := getCorpus(source, wrapper)
 		rantexts = append(rantexts, DirectedRantext(source, corpus))
 		rantexts = append(rantexts, UndirectedRantext(source, corpus))

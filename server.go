@@ -8,7 +8,6 @@ import (
 	"strings"
 )
 
-var GlobalConfig config
 var NetworkConfigs map[string]config
 var MarkdownParser *markdown.Parser
 var Template *template.Template
