@@ -1,12 +1,12 @@
 package main
 
 import (
-    "github.com/thoj/go-ircevent"
-    "fmt"
-		"strings"
-		"reflect"
-		"math/rand"
-		"time"
+	"github.com/thoj/go-ircevent"
+	"fmt"
+	"strings"
+	"reflect"
+	"math/rand"
+	"time"
 )
 
 const (
