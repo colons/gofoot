@@ -6,10 +6,10 @@ import (
 	"github.com/knieriem/markdown"
 	"text/template"
 	"strings"
+	"bytes"
 )
 
 var NetworkConfigs map[string]config
-var MarkdownParser *markdown.Parser
 var Template *template.Template
 
 type Doc struct {
@@ -24,6 +24,7 @@ type DocContext struct {
 func GlobalDocsHandler(w http.ResponseWriter, req *http.Request) {
 	context := DocContext{}
 	funcMap := template.FuncMap{"Config": GlobalConfig.Global}
+	p := markdown.NewParser(&markdown.Extensions{Smart: true})
 
 	for _, command := range(Commands) {
 		doc := Doc{}
@@ -32,7 +33,11 @@ func GlobalDocsHandler(w http.ResponseWriter, req *http.Request) {
 			argCommand := argCommandFor(command)
 			doc.Invocation = GlobalConfig.Global("comchar") + strings.Join(argCommand.Args, " ")
 		}
-		doc.Doc = command.GetDocs()
+
+		mdDocBuffer := bytes.NewBufferString(command.GetDocs())
+		htmlDocBuffer := bytes.NewBuffer([]byte{})
+		p.Markdown(mdDocBuffer, markdown.ToHTML(htmlDocBuffer))
+		doc.Doc = htmlDocBuffer.String()
 
 		context.Docs = append(context.Docs, doc)
 	}
@@ -52,7 +57,6 @@ func ServeCSS(w http.ResponseWriter, req *http.Request) {
 
 func RunServer() {
 	GlobalConfig = GetConfig("")
-	MarkdownParser = markdown.NewParser(&markdown.Extensions{Smart: true})
 
 	http.HandleFunc("/", GlobalDocsHandler)
 	http.HandleFunc("/docs.css", ServeCSS)
