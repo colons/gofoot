@@ -8,12 +8,12 @@ func GetUserConfig() UserConfig {
 			"nick": "gofoot",
 			"user": "gofoot",
 
-      // the character used to mark the start of commands
+			// the character used to mark the start of commands
 			"comchar": "!",
 
 			// listen address for the help server
 			"listen": "localhost:4321"
-      // the url to send people to the help server with
+			// the url to send people to the help server with
 			"url": "http://localhost:4321",
 
 			// plugin-specific stuff
