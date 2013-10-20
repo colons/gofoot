@@ -9,11 +9,13 @@ import (
 type CommandInterface interface {
 	Handle(*irc.Event)
 	ShouldHandle(*irc.Event) bool
+	GetDocs() string
 }
 
 
 type ArgCommand struct {
 	Args []string;
+	docs string;
 }
 
 
@@ -103,6 +105,10 @@ func (c ArgCommand) argsForCommand(command string) (args map[string]string) {
 	return
 }
 
+func (c ArgCommand) GetDocs() string {
+	return c.docs
+}
+
 
 // Return a Command's ArgCommand field after asserting that it is an ArgCommand
 func argCommandFor(command CommandInterface) ArgCommand {
@@ -143,4 +149,8 @@ func handleUnmanagedCommands(e *irc.Event) {
 			command.Handle(e)
 		}
 	}
+}
+
+func IsArgCommand(command CommandInterface) bool {
+	return reflect.ValueOf(command).FieldByName("ArgCommand") != reflect.Value{}
 }

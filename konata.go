@@ -13,7 +13,10 @@ type KonataCommand struct {
 
 func Konata() KonataCommand {
 	return KonataCommand{
-		ArgCommand{Args: []string{"konata", "[otaku]"}},
+		ArgCommand{
+			Args: []string{"konata", "[otaku]"},
+			docs: "Expresses affection. Verbose.",
+		},
 		[4]string{
 			"I like konata because she is a otaku like me, except she has friends. Oh god I wish I had friends too ;_;",
 			"konata also likes videogames and she is kawaii. And there are lesbians in the show and that's good because I like lesbians and I will never have a girlfriend. Why am I such a loser?!",

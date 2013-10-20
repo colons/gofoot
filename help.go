@@ -12,7 +12,10 @@ type HelpQueryCommand struct {
 
 func HelpQuery() HelpQueryCommand {
 	return HelpQueryCommand{
-		ArgCommand{Args: []string{"help", "[query]"}},
+		ArgCommand{
+			Args: []string{"help", "[query]"},
+			docs: "Get information about a particular command.",
+		},
 	}
 }
 

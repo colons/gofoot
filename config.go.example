@@ -7,7 +7,12 @@ func GetUserConfig() UserConfig {
 		global: map[string]string {
 			"nick": "gofoot",
 			"user": "gofoot",
+
+      // the character used to mark the start of commands
 			"comchar": "!",
+
+			// listen address for the help server
+			"listen": "localhost:4321"
 		},
 		network: map[string]map[string]string {
 			"highway": map[string]string {

@@ -24,6 +24,11 @@ func Http() HttpCommand {
 }
 
 
+func (c HttpCommand) GetDocs() string {
+	return "Gets metadata about URLs."
+}
+
+
 func (c HttpCommand) ShouldHandle(e *irc.Event) bool {
 	return (urlMatch.FindStringIndex(e.Message) != nil)
 }

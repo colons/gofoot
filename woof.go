@@ -15,6 +15,10 @@ func Woof() WoofCommand {
 	return instance
 }
 
+func (c WoofCommand) GetDocs() string {
+	return "Woofs when woofed at."
+}
+
 func (c WoofCommand) ShouldHandle(e *irc.Event) bool {
 	return woofMatch.MatchString(e.Message)
 }

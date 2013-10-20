@@ -19,12 +19,17 @@ func GetConfig(network string) config {
 	return config{GetUserConfig(), network}
 }
 
+// get config for key applying globally
+func (c config) Global(key string) string {
+	return c.userConfig.global[key]
+}
+
 // get config for key applying to the attached network
 func (c config) Network(key string) string {
 	if value, ok := c.userConfig.network[c.ourNetwork][key]; ok {
 		return value
 	} else {
-		return c.userConfig.global[key]
+		return c.Global(key)
 	}
 }
 

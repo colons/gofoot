@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"bufio"
 	"math/rand"
+	"strings"
 )
 
 type Corpus struct {
@@ -34,7 +35,10 @@ func Rantext() (rantexts []CommandInterface) {
 
 func DirectedRantext(source string, corpus *Corpus) RantextCommand {
 	instance := RantextCommand{
-		ArgCommand: ArgCommand{Args: []string{source, "[subject]"}},
+		ArgCommand: ArgCommand{
+			Args: []string{source, "[subject]"},
+			docs: "[subject]: " + corpus.Choice(),
+		},
 		Corpus: corpus,
 	}
 
@@ -44,7 +48,10 @@ func DirectedRantext(source string, corpus *Corpus) RantextCommand {
 
 func UndirectedRantext(source string, corpus *Corpus) RantextCommand {
 	instance := RantextCommand{
-		ArgCommand: ArgCommand{Args: []string{source}},
+		ArgCommand: ArgCommand{
+			Args: []string{source},
+			docs: corpus.Choice(),
+		},
 		Corpus: corpus,
 	}
 
@@ -73,19 +80,23 @@ func getCorpus(source, wrapper string) (*Corpus) {
 
 
 func (corpus Corpus) Choice() string {
-	item := corpus.Text[rand.Intn(len(corpus.Text))]
-	return fmt.Sprintf(corpus.Wrapper, item)
+	return strings.TrimSpace(corpus.Text[rand.Intn(len(corpus.Text))])
+}
+
+func (corpus Corpus) WrappedChoice() string {
+	return fmt.Sprintf(corpus.Wrapper, corpus.Choice())
 }
 
 
 func (c RantextCommand) Handle(e *irc.Event) {
 	subject := c.argsForCommand(e.Message)["subject"]
+	choice := c.Corpus.WrappedChoice()
 	var message string
 
 	if subject != "" {
-		message = fmt.Sprintf("%s: %s", subject, c.Corpus.Choice())
+		message = fmt.Sprintf("%s: %s", subject, choice)
 	} else {
-		message = fmt.Sprintf("%s", c.Corpus.Choice())
+		message = fmt.Sprintf("%s", choice)
 	}
 
 	Connection.Privmsg(getTarget(e), message)

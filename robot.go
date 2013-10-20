@@ -2,7 +2,6 @@ package main
 
 import (
 	"strings"
-	"reflect"
 	"fmt"
 	"github.com/thoj/go-ircevent"
 )
@@ -16,20 +15,6 @@ func RunRobot(network string) {
 	}
 
 	Connection = irc.IRC(Config.Network("nick"), Config.Network("user"))
-
-	commands := []CommandInterface{
-		HelpQuery(), Woof(), Http(), Konata(),
-	}
-
-	commands = append(commands, Rantext()...)
-
-	for _, command := range(commands) {
-		if (reflect.ValueOf(command).FieldByName("ArgCommand") == reflect.Value{}) {
-			unmanagedCommands = append(unmanagedCommands, command)
-		} else {
-			argCommands = append(argCommands, command)
-		}
-	}
 
 	Connection.AddCallback("001", func(e *irc.Event) {
 		rooms := strings.Split(Config.Network("rooms"), ",")

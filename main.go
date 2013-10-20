@@ -16,6 +16,7 @@ const (
 var Connection *irc.Connection
 var argCommands []CommandInterface
 var unmanagedCommands []CommandInterface
+var Commands []CommandInterface
 var Config config
 
 func main() {
@@ -26,6 +27,22 @@ func main() {
 		return
 	}
 
+	// initialize commands
+	Commands = []CommandInterface{
+		HelpQuery(), Woof(), Http(), Konata(),
+	}
+	Commands = append(Commands, Rantext()...)
+
+	// divvy up commands into managed and unmanaged
+	for _, command := range(Commands) {
+		if IsArgCommand(command) {
+			argCommands = append(argCommands, command)
+		} else {
+			unmanagedCommands = append(unmanagedCommands, command)
+		}
+	}
+
+	// and do what we came here for
 	switch mode := os.Args[1]; mode {
 	case "robot":
 		if len(os.Args) < 3 {
@@ -35,7 +52,8 @@ func main() {
 			network := os.Args[2]
 			RunRobot(network)
 		}
-	// XXX case "server":
+	case "server":
+		RunServer()
 	}
 }
 

@@ -1,0 +1,62 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+  font-family: sans-serif;
+  color: #333;
+
+  background-color: #fff;
+  background-image: url('http://colons.co/noise.png');
+  background-repeat: repeat;
+
+  text-shadow: #fff 0px 1px 0;
+  max-width: 800px;
+  min-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 .5em;
+}
+
+h1 {
+  font-weight: 500;
+  padding: .8em 0;
+  width: 78%;
+  float: right;
+}
+
+section {
+  clear: both;
+}
+
+div.invocation {
+  font-family: monospace;
+  clear: both;
+  float: left;
+  text-align: right;
+  width: 20%;
+  color: #d66;
+}
+
+div.doc, div.item {
+  float: right;
+  width: 78%;
+  padding-bottom: 1em;
+  clear: right;
+}
+
+p.stamp {
+  clear: both;
+  padding: 1em 0 5em 0;
+  text-align: center;
+}
+
+p.stamp img {
+  width: 6em;
+  height: 6em;
+}
+
+p.stamp a:hover {
+  border: none;
+}
