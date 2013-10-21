@@ -34,7 +34,8 @@ func NowPlayingForUser() NowPlayingForUserCommand {
 }
 
 func (c NowPlayingForUserCommand) Handle(e *irc.Event) {
-	recentest := recentestForUser("NiviJh")
+	user := c.argsForCommand(e.Message)["user"]
+	recentest := recentestForUser(user)
 	trackData := []string{
 		fmt.Sprintf("\x02%s\x02", recentest.Name),
 	}
@@ -49,7 +50,7 @@ func (c NowPlayingForUserCommand) Handle(e *irc.Event) {
 		trackData = append(trackData, artist)
 	}
 
-	userData := []string{fmt.Sprintf("http://last.fm/user/%s", "NiviJh")}
+	userData := []string{fmt.Sprintf("http://last.fm/user/%s", user)}
 
 	data := [][]string{trackData, userData}
 	Connection.Privmsg(getTarget(e), prettyNestedStuff(data))
@@ -62,7 +63,7 @@ func recentestForUser(user string) RecentTrack {
 	args.Set("format", "json")
 	args.Set("api_key", Config.Network("lastfm_api_key"))
 	args.Set("method", "user.getRecentTracks")
-	args.Set("user", "NiviJh")
+	args.Set("user", user)
 
 	theUrl := fmt.Sprintf(urlFmt, args.Encode())
 	fmt.Println(theUrl)
