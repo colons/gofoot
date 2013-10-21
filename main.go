@@ -21,7 +21,7 @@ var GlobalConfig config
 var Config config
 
 func main() {
-	GlobalConfig = GetConfig("")
+	var task func()
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	if len(os.Args) < 2 {
@@ -29,9 +29,24 @@ func main() {
 		return
 	}
 
+	switch mode := os.Args[1]; mode {
+	case "robot":
+		if len(os.Args) < 3 {
+			fmt.Println(USAGE)
+			return
+		} else {
+			network := os.Args[2]
+			Config = GetConfig(network)
+			task = func() {RunRobot(network)}
+		}
+	case "server":
+		task = RunServer
+		Config = GetConfig("")
+	}
+
 	// initialize commands
 	Commands = []CommandInterface{
-		About(), Help(), Woof(), Http(), Konata(),
+		About(), Help(), Woof(), Http(), Konata(), NowPlayingForUser(),
 	}
 	Commands = append(Commands, Rantext()...)
 
@@ -44,17 +59,5 @@ func main() {
 		}
 	}
 
-	// and do what we came here for
-	switch mode := os.Args[1]; mode {
-	case "robot":
-		if len(os.Args) < 3 {
-			fmt.Println(USAGE)
-			return
-		} else {
-			network := os.Args[2]
-			RunRobot(network)
-		}
-	case "server":
-		RunServer()
-	}
+	task()
 }

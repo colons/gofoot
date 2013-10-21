@@ -2,7 +2,10 @@
 
 package main
 
-import "github.com/thoj/go-ircevent"
+import (
+	"github.com/thoj/go-ircevent"
+	"fmt"
+)
 
 type UserConfig struct {
 	global map[string]string
@@ -24,7 +27,8 @@ func (c config) Global(key string) string {
 	if value, ok := c.userConfig.global[key]; ok {
 		return value
 	} else {
-		return GlobalConfig.Global(key)
+		fmt.Printf("Could not find config key %s\n", key)
+		return ""
 	}
 }
 
