@@ -51,8 +51,7 @@ func metadataForUrl(url string) []string {
 
 	resp, err := http.Get(url)
 	if err != nil {
-		fmt.Printf("Error getting %s: %s\n", url, err)
-		return nil
+		return []string{err.Error()}
 	}
 	defer resp.Body.Close()
 

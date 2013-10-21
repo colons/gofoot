@@ -12,12 +12,13 @@ func GetUserConfig() UserConfig {
 			"comchar": "!",
 
 			// listen address for the help server
-			"listen": "localhost:4321"
+			"listen": "localhost:4321",
 			// the url to send people to the help server with
 			"url": "http://localhost:4321",
 
 			// plugin-specific stuff
-			"rantext_sources": "jerkcity,troll"
+			"rantext_sources": "jerkcity,troll",
+			"lastfm_api_key": "",
 		},
 		network: map[string]map[string]string {
 			"highway": map[string]string {
