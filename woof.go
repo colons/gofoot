@@ -10,7 +10,7 @@ var woofMatch *regexp.Regexp
 type WoofCommand struct {}
 
 func Woof() WoofCommand {
-	woofMatch = regexp.MustCompile(".*\\b(woof)\\b.*")
+	woofMatch = regexp.MustCompile(`.*\b(woof)\b.*`)
 	instance := WoofCommand{}
 	return instance
 }

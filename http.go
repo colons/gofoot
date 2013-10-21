@@ -18,7 +18,7 @@ var titleSelector *selector.Chain
 type HttpCommand struct {}
 
 func Http() HttpCommand {
-	urlMatch = regexp.MustCompile("\\b(https?://\\S+)\\b")
+	urlMatch = regexp.MustCompile(`\b(https?://\S+)\b`)
 	instance := HttpCommand{}
 	return instance
 }
