@@ -43,7 +43,6 @@ func DirectedRantext(source string, corpus *Corpus) RantextCommand {
 	instance := RantextCommand{
 		ArgCommand: ArgCommand{
 			Args: []string{source, "[subject]"},
-			docs: fmt.Sprintf("`[subject]: %s`", corpus.Choice()),
 		},
 		Corpus: corpus,
 	}
@@ -51,12 +50,21 @@ func DirectedRantext(source string, corpus *Corpus) RantextCommand {
 	return instance
 }
 
+func (r RantextCommand) GetDocs() string {
+	var theFmt string
+	if len(r.Args) == 2 {
+		theFmt = "`[subject]: %s`"
+	} else {
+		theFmt = "`%s`"
+	}
+	return fmt.Sprintf(theFmt, r.Corpus.Choice())
+}
+
 
 func UndirectedRantext(source string, corpus *Corpus) RantextCommand {
 	instance := RantextCommand{
 		ArgCommand: ArgCommand{
 			Args: []string{source},
-			docs: fmt.Sprintf("`%s`", corpus.Choice()),
 		},
 		Corpus: corpus,
 	}
