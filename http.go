@@ -17,8 +17,10 @@ var titleSelector *selector.Chain
 
 type HttpCommand struct {}
 
-func (c HttpCommand) Initialize() {
+func Http() HttpCommand {
 	urlMatch = regexp.MustCompile("\\b(https?://\\S+)\\b")
+	instance := HttpCommand{}
+	return instance
 }
 
 
@@ -30,8 +32,8 @@ func (c HttpCommand) ShouldHandle(e *irc.Event) bool {
 func (c HttpCommand) Handle(e *irc.Event) {
 	urls := urlMatch.FindAllString(e.Message, -1)
 
-	for i := 0; i < len(urls); i++ {
-		metadata := metadataForUrl(urls[i])
+	for _, url := range urls {
+		metadata := metadataForUrl(url)
 		if metadata != nil {
 			sendStuff(getTarget(e), metadata)
 		}
@@ -88,9 +90,9 @@ func getTitles(tree *h5.Tree) (titles []*html.Node) {
 
 func humanSize(size int64) string {
 	suffixes := []string{"bytes", "KB", "MB", "GB", "TB"}
-	for i := 0; i < len(suffixes); i++ {
+	for _, suffix := range(suffixes) {
 		if size < 1024 {
-			return fmt.Sprintf("%d %s", size, suffixes[i])
+			return fmt.Sprintf("%d %s", size, suffix)
 		}
 		size = size/1024
 	}

@@ -9,8 +9,10 @@ var woofMatch *regexp.Regexp
 
 type WoofCommand struct {}
 
-func (c WoofCommand) Initialize() {
+func Woof() WoofCommand {
 	woofMatch = regexp.MustCompile(".*\\b(woof)\\b.*")
+	instance := WoofCommand{}
+	return instance
 }
 
 func (c WoofCommand) ShouldHandle(e *irc.Event) bool {

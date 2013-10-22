@@ -23,13 +23,13 @@ var Con *irc.Connection
 func main() {
 	TheConfig = GetConfig()
 	Con = irc.IRC(TheConfig.Nick, TheConfig.User)
-	commands := []Command{
-		WoofCommand{}, HttpCommand{},
+	commands := []CommandInterface{
+		Woof(), Http(), Konata(),
 	}
 
 	Con.AddCallback("001", func(e *irc.Event) {
-		for i := 0; i < len(TheConfig.Rooms); i++ {
-			Con.Join(TheConfig.Rooms[i])
+		for _, room := range(TheConfig.Rooms) {
+			Con.Join(room)
 		}
 	})
 
@@ -37,10 +37,8 @@ func main() {
 		Con.SendRawf("NOTICE %s :\x01VERSION %s\x01", e.Nick, VERSION)
 	})
 
-
 	for i := 0; i < len(commands); i++ {
 		command := commands[i]
-		command.Initialize()
 
 		Con.AddCallback("PRIVMSG", func(e *irc.Event) {
 			if command.ShouldHandle(e) {
