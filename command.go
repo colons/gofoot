@@ -32,7 +32,8 @@ func sendStuff(target string, stuff []string) {
 
 // take a message and split it into as many chunks as we expect args
 func splitArgs(c ArgCommand, message string) []string {
-	return strings.SplitN(message, " ", len(c.Args))
+	strippedMessage := strings.TrimRight(message, " ")
+	return strings.SplitN(strippedMessage, " ", len(c.Args))
 }
 
 func argIsVariable(arg string) bool {
