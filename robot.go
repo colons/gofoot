@@ -8,7 +8,8 @@ import (
 
 func RunRobot(network string) {
 	Config = GetConfig(network)
-
+	InitPersist()
+	
 	if Config.Network("address") == "" {
 		fmt.Println("No address configured.")
 		return
