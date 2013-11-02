@@ -22,6 +22,7 @@ func GetUserConfig() UserConfig {
 		},
 		network: map[string]map[string]string {
 			"highway": map[string]string {
+				"nickserv_password": "sekrit",
 				"address": "irc.irchighway.net:6669",
 				"rooms": "#channel_a,#a_channel",
 				"ignore": "a_robot,another_robot",

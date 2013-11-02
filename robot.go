@@ -18,8 +18,12 @@ func RunRobot(network string) {
 	Connection = irc.IRC(Config.Network("nick"), Config.Network("user"))
 
 	Connection.AddCallback("001", func(e *irc.Event) {
-		rooms := strings.Split(Config.Network("rooms"), ",")
+		nickservPassword := Config.Network("nickserv_password")
+		if nickservPassword != "" {
+			Connection.Privmsg("nickserv", "identify " + nickservPassword)
+		}
 
+		rooms := strings.Split(Config.Network("rooms"), ",")
 		for _, room := range(rooms) {
 			Connection.Join(room)
 		}
