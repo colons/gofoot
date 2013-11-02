@@ -22,10 +22,12 @@ func RunRobot(network string) {
 		if nickservPassword != "" {
 			Connection.Privmsg("nickserv", "identify " + nickservPassword)
 		}
+		joinRooms()
+	})
 
-		rooms := strings.Split(Config.Network("rooms"), ",")
-		for _, room := range(rooms) {
-			Connection.Join(room)
+	Connection.AddCallback("NOTICE", func(e *irc.Event) {
+		if strings.ToLower(e.Nick) == "nickserv" {
+			joinRooms();
 		}
 	})
 
@@ -43,4 +45,12 @@ func RunRobot(network string) {
 	}
 
 	Connection.Loop()
+}
+
+func joinRooms() {
+	fmt.Println("Joining")
+	rooms := strings.Split(Config.Network("rooms"), ",")
+	for _, room := range(rooms) {
+		Connection.Join(room)
+	}
 }
