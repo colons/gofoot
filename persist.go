@@ -33,10 +33,12 @@ func InitPersist() {
 
 		if DB, err = kv.Create(dbPath, &kv.Options{}); err != nil {
 			fmt.Printf("Could not create db %s:\n", err)
+			os.Exit(1)
 		}
 	} else {
 		if DB, err = kv.Open(dbPath, &kv.Options{}); err != nil {
 			fmt.Printf("Could not open db %s:\n", err)
+			os.Exit(1)
 		}
 	}
 }
