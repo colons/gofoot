@@ -4,23 +4,11 @@ import (
 	"strings"
 	"fmt"
 	"github.com/thoj/go-ircevent"
-	"os/signal"
-	"os"
 )
 
 func RunRobot(network string) {
 	Config = GetConfig(network)
-	InitPersist()
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	go func(){
-		for sig := range c {
-			DB.Close()
-			fmt.Println(sig)
-			os.Exit(0)
-		}
-	}()
-
+	InitPersist(network)
 	
 	if Config.Network("address") == "" {
 		fmt.Println("No address configured.")
