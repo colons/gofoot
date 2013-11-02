@@ -68,7 +68,8 @@ func metadataForUrl(url string) []string {
 		tree, _ := h5.New(resp.Body)
 		titles := getTitles(tree)
 		if (len(titles) > 0) {
-			metadata = append(metadata, fmt.Sprintf("\x02%s\x02", titles[0].FirstChild.Data))
+			title := strings.TrimSpace(titles[0].FirstChild.Data)
+			metadata = append(metadata, fmt.Sprintf("\x02%s\x02", title))
 		}
 	} else {
 		human := humanSize(resp.ContentLength)
