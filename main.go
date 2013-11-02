@@ -6,7 +6,6 @@ import (
 	"math/rand"
 	"time"
 	"os"
-	"os/signal"
 )
 
 const (
@@ -60,16 +59,5 @@ func main() {
 		}
 	}
 
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
-	go func(){
-		for sig := range c {
-			DB.Close()
-			fmt.Println(sig)
-			os.Exit(0)
-		}
-	}()
-
 	task()
 }
-

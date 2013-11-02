@@ -79,7 +79,14 @@ func (c ArgCommand) ShouldHandleMessage(e *irc.Event, message string, requireAll
 
 	for _, i := range interesting {
 		expected := c.Args[i]
-		if !strings.HasPrefix(expected, split[i]) {
+		var part string
+		if !requireAllArguments && i >= len(split) {
+			part = ""
+		} else {
+			part = split[i]
+		}
+
+		if !strings.HasPrefix(expected, part) {
 			return false
 		}
 	}
