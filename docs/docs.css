@@ -21,9 +21,21 @@ body {
 
 h1 {
   font-weight: 500;
-  padding: .8em 0;
+  padding: .8em 0 .4em;
   width: 78%;
   float: right;
+}
+
+a {
+    color: #d66;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #333;
+    border-color: #d66;
+    border-width: 0 0 1px 0;
+    border-style: none none dotted none;
 }
 
 section {
@@ -39,11 +51,15 @@ div.invocation {
   color: #d66;
 }
 
-div.doc, div.item {
+.doc, .item, .summary {
   float: right;
   width: 78%;
   padding-bottom: 1em;
   clear: right;
+}
+
+.summary {
+  margin-bottom: 1em;
 }
 
 p.stamp {

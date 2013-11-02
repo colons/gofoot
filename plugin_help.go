@@ -47,7 +47,7 @@ func About() AboutCommand {
 	return AboutCommand{
 		ArgCommand{
 			Args: []string{"help"},
-			docs: "Some useful links for your consideration.",
+			docs: "Provides you with some useful links for your consideration.",
 		},
 	}
 }
