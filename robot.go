@@ -31,6 +31,10 @@ func RunRobot(network string) {
 		}
 	})
 
+	Connection.AddCallback("INVITE", func(e *irc.Event) {
+		Connection.Join(e.Message)
+	})
+
 	Connection.ReplaceCallback("CTCP_VERSION", 0, func(e *irc.Event) {
 		Connection.SendRawf("NOTICE %s :\x01VERSION %s\x01", e.Nick, VERSION)
 	})
@@ -48,7 +52,6 @@ func RunRobot(network string) {
 }
 
 func joinRooms() {
-	fmt.Println("Joining")
 	rooms := strings.Split(Config.Network("rooms"), ",")
 	for _, room := range(rooms) {
 		Connection.Join(room)
