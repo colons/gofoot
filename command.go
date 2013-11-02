@@ -135,8 +135,14 @@ func commandIsAllowedToHandle(command CommandInterface, e *irc.Event) bool {
 			return false
 		}
 	}
+	for _, ignored := range strings.Split(Config.Event(e, "ignore"), ",") {
+		if e.Nick == ignored {
+			return false
+		}
+	}
 	return true
 }
+
 
 func handleArgCommands(e *irc.Event) {
 	handlers := []CommandInterface{}

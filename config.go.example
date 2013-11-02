@@ -24,6 +24,7 @@ func GetUserConfig() UserConfig {
 			"highway": map[string]string {
 				"address": "irc.irchighway.net:6669",
 				"rooms": "#channel_a,#a_channel",
+				"ignore": "a_robot,another_robot",
 			},
 		},
 		channel: map[string]map[string]map[string]string {
@@ -34,8 +35,8 @@ func GetUserConfig() UserConfig {
 					"comchar": "+",
 
 					// if these people are heathens, they might not want inane animal
-					// noises coming into their channel
-					"blacklist": "Woof",
+					// noises or http metadata coming into their channel
+					"blacklist": "Woof,Http",
 				},
 			},
 		},
