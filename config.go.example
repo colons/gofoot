@@ -29,9 +29,13 @@ func GetUserConfig() UserConfig {
 		channel: map[string]map[string]map[string]string {
 			"highway": map[string]map[string]string {
 				"#a_channel": {
-					// if there's a robot in this channel that already uses !,
-					// we might want to use + for this channel alone
+					// if there's a robot in this channel that already uses !, we might
+					// want to use + for this channel alone
 					"comchar": "+",
+
+					// if these people are heathens, they might not want inane animal
+					// noises coming into their channel
+					"blacklist": "Woof",
 				},
 			},
 		},

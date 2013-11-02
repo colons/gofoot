@@ -4,7 +4,6 @@ package main
 
 import (
 	"github.com/thoj/go-ircevent"
-	"fmt"
 )
 
 type UserConfig struct {
@@ -27,7 +26,7 @@ func (c config) Global(key string) string {
 	if value, ok := c.userConfig.global[key]; ok {
 		return value
 	} else {
-		fmt.Printf("Could not find config key %s\n", key)
+		// fmt.Printf("Could not find config key %s\n", key)
 		return ""
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/thoj/go-ircevent"
 	"strings"
 	"reflect"
+	"fmt"
 )
 
 type CommandInterface interface {
@@ -123,11 +124,25 @@ func argCommandFor(command CommandInterface) ArgCommand {
 }
 
 
+// Decide if a command should be allowed to handle an event based on the configured blacklist
+func commandIsAllowedToHandle(command CommandInterface, e *irc.Event) bool {
+	commandName := fmt.Sprint(reflect.ValueOf(command).Type())
+	commandName = strings.TrimPrefix(commandName, "main.")
+	commandName = strings.TrimSuffix(commandName, "Command")
+
+	for _, blacklisted := range strings.Split(Config.Event(e, "blacklist"), ",") {
+		if commandName == blacklisted {
+			return false
+		}
+	}
+	return true
+}
+
 func handleArgCommands(e *irc.Event) {
 	handlers := []CommandInterface{}
 
 	for _, command := range(argCommands) {
-		if command.ShouldHandle(e) {
+		if commandIsAllowedToHandle(command, e) && command.ShouldHandle(e) {
 			handlers = append(handlers, command)
 		}
 	}
@@ -152,7 +167,7 @@ func handleArgCommands(e *irc.Event) {
 
 func handleUnmanagedCommands(e *irc.Event) {
 	for _, command := range(unmanagedCommands) {
-		if command.ShouldHandle(e) {
+		if commandIsAllowedToHandle(command, e) && command.ShouldHandle(e) {
 			command.Handle(e)
 		}
 	}
