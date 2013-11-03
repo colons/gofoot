@@ -21,8 +21,13 @@ type RantextCommand struct {
 
 func Rantext() (rantexts []CommandInterface) {
 	wrappers := map[string]string{
-		"jerkcity": "\x02%s\x02",
-		"troll": "\x0304,08%s\x03",
+		"jerkcity": "\x02%s",
+		"troll": "\x0304,08%s",
+		"sharon": "\x0302,00%s",
+		"thatcher": "\x0302%s",
+		"theo": "\x0304,01%s",
+		"toothbrush": "\x02\x0307%s",
+
 	}
 
 	sources := strings.Split(Config.Global("rantext_sources"), ",")
