@@ -126,17 +126,21 @@ func argCommandFor(command CommandInterface) ArgCommand {
 
 // Decide if a command should be allowed to handle an event based on the configured blacklist
 func commandIsAllowedToHandle(command CommandInterface, e *irc.Event) bool {
+	for _, ignored := range strings.Split(Config.Event(e, "ignore"), ",") {
+		if e.Nick == ignored {
+			return false
+		}
+	}
+	return commandNotIn(command, Config.Source(getTarget(e), "blacklist"))
+}
+
+func commandNotIn(command CommandInterface, blacklist string) bool {
 	commandName := fmt.Sprint(reflect.ValueOf(command).Type())
 	commandName = strings.TrimPrefix(commandName, "main.")
 	commandName = strings.TrimSuffix(commandName, "Command")
 
-	for _, blacklisted := range strings.Split(Config.Event(e, "blacklist"), ",") {
+	for _, blacklisted := range strings.Split(blacklist, ",") {
 		if commandName == blacklisted {
-			return false
-		}
-	}
-	for _, ignored := range strings.Split(Config.Event(e, "ignore"), ",") {
-		if e.Nick == ignored {
 			return false
 		}
 	}

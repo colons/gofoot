@@ -50,6 +50,10 @@ func DocsHandler(w http.ResponseWriter, req *http.Request) {
 	p := markdown.NewParser(&markdown.Extensions{Smart: true})
 
 	for _, command := range(Commands) {
+		if !commandNotIn(command, config("blacklist")) {
+			continue
+		}
+
 		doc := Doc{}
 
 		if IsArgCommand(command) {
