@@ -4,11 +4,18 @@ import (
 	"strings"
 	"fmt"
 	"github.com/thoj/go-ircevent"
+	"crypto/tls"
+	"time"
 )
+
+var Recognised bool
+var Identified bool
 
 func RunRobot(network string) {
 	Config = GetConfig(network)
 	InitPersist(network)
+	Identified = false
+	Recognised = false
 	
 	if Config.Network("address") == "" {
 		fmt.Println("No address configured.")
@@ -16,15 +23,25 @@ func RunRobot(network string) {
 	}
 
 	Connection = irc.IRC(Config.Network("nick"), Config.Network("user"))
+	if Config.Network("ssl") != "" {
+		Connection.UseTLS = true
+		Connection.TLSConfig = &tls.Config{
+			InsecureSkipVerify: true,  // sigh
+		}
+	}
 
 	Connection.AddCallback("001", func(e *irc.Event) {
 		joinRooms()
 	})
 
 	Connection.AddCallback("NOTICE", func(e *irc.Event) {
-		if strings.ToLower(e.Nick) == "nickserv" {
+		if (!Recognised) && strings.ToLower(e.Nick) == "nickserv" {
 			fmt.Println(e.Message)
-			identify()
+			if !Identified {
+				identify()
+			} else {
+				Recognised = true  // i assume
+			}
 			joinRooms()
 		}
 	})
@@ -61,4 +78,6 @@ func identify() {
 	if nickservPassword != "" {
 		Connection.Privmsg("nickserv", "identify " + nickservPassword)
 	}
+	Identified = true
+	time.Sleep(time.Second)
 }

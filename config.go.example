@@ -26,6 +26,9 @@ func GetUserConfig() UserConfig {
 				"address": "irc.irchighway.net:6669",
 				"rooms": "#channel_a,#a_channel",
 				"ignore": "a_robot,another_robot",
+
+				// anything but the empty string or complete absence counts as true
+				"ssl": "yep",
 			},
 		},
 		channel: map[string]map[string]map[string]string {
