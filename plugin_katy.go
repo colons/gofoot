@@ -14,7 +14,7 @@ func Katy() KatyCommand {
 	return KatyCommand{
 		ArgCommand{
 			Args: []string{"katy", "[otaku]"},
-			docs: "Expresses affection. Verbose.",
+			docs: "So randum rofl xd. Verbose.",
 		},
 		[6]string{
 			"hi every1 im new!!!!!!! *holds up spork* my name is katy but u can call me t3h PeNgU1N oF d00m!!!!!!!! lol...as u can see im very random!!!! thats why i came here, 2 meet random ppl like me ^_^...",
