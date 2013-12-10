@@ -46,7 +46,7 @@ func main() {
 
 	// initialize commands
 	Commands = []CommandInterface{
-		About(), Help(), Woof(), Http(), Konata(), NowPlaying(), NowPlayingForUser(), SetLastFM(),
+		About(), Help(), Woof(), Http(), Katy(), Konata(), NowPlaying(), NowPlayingForUser(), SetLastFM(),
 	}
 	Commands = append(Commands, Rantext()...)
 
