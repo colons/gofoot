@@ -66,10 +66,14 @@ func metadataForUrl(url string) []string {
 
 	if contentType == "text/html" && resp.ContentLength == -1 {
 		tree, _ := h5.New(resp.Body)
-		titles := getTitles(tree)
-		if (len(titles) > 0) {
-			title := strings.TrimSpace(titles[0].FirstChild.Data)
-			metadata = append(metadata, fmt.Sprintf("\x02%s\x02", title))
+
+		for _, node := range(getTitles(tree)) {
+      title := node.FirstChild
+
+      if title != nil {
+        trimmedTitle := strings.TrimSpace(title.Data)
+        metadata = append(metadata, fmt.Sprintf("\x02%s\x02", trimmedTitle))
+      }
 		}
 	} else {
 		human := humanSize(resp.ContentLength)
