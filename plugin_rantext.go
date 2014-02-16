@@ -27,7 +27,6 @@ func Rantext() (rantexts []CommandInterface) {
 		"thatcher": "\x0302%s",
 		"theo": "\x0304,01%s",
 		"toothbrush": "\x02\x0307%s",
-
 	}
 
 	sources := strings.Split(Config.Global("rantext_sources"), ",")
