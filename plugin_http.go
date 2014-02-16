@@ -4,6 +4,7 @@ import (
 	"github.com/thoj/go-ircevent"
 	"regexp"
 	"net/http"
+	"net/url"
 	"code.google.com/p/go.net/html"
 	"code.google.com/p/go-html-transform/css/selector"
 	"code.google.com/p/go-html-transform/h5"
@@ -46,10 +47,10 @@ func (c HttpCommand) Handle(e *irc.Event) {
 }
 
 
-func metadataForUrl(url string) []string {
+func metadataForUrl(inputURL string) []string {
 	metadata := []string{}
 
-	resp, err := http.Get(url)
+	resp, err := http.Get(inputURL)
 	if err != nil {
 		return []string{err.Error()}
 	}
@@ -80,7 +81,12 @@ func metadataForUrl(url string) []string {
 		metadata = append(metadata, human)
 	}
 
-	metadata = append(metadata, resp.Request.URL.Host)
+	if (resp.Request.URL.String() != inputURL) {
+		parsedInputURL, _ := url.Parse(inputURL)
+		metadata = append(metadata, fmt.Sprintf("%s \x034->\x03 %s", parsedInputURL.Host, resp.Request.URL.String()))
+	} else {
+		metadata = append(metadata, resp.Request.URL.Host)
+	}
 
 	return metadata
 }
