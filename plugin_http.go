@@ -72,7 +72,7 @@ func metadataForUrl(inputURL string) []string {
       title := node.FirstChild
 
       if title != nil {
-        trimmedTitle := strings.Join(strings.Fields(title.Data), " ")
+        trimmedTitle := strings.TrimSpace(title.Data)
         metadata = append(metadata, fmt.Sprintf("\x02%s\x02", trimmedTitle))
       }
 		}

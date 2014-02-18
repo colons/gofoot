@@ -17,14 +17,19 @@ func getTarget(event *irc.Event) (target string) {
 	return
 }
 
+// strip consecutive whitespace from a string
+func safeStuff(unsafe string) string {
+	return strings.Join(strings.Fields(unsafe), " ")
+}
+
 func prettyNestedStuff(stuff [][]string) string {
 	subStuff := []string{}
 	for _, thing := range(stuff) {
 		subStuff = append(subStuff, strings.Join(thing, " \x034:\x03 "))
 	}
-	return strings.Join(subStuff, " \x034|\x03 ")
+	return safeStuff(strings.Join(subStuff, " \x034|\x03 "))
 }
 
 func prettyStuff(stuff []string) string {
-	return strings.Join(stuff, " \x034|\x03 ")
+	return safeStuff(strings.Join(stuff, " \x034|\x03 "))
 }
