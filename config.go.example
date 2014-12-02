@@ -1,4 +1,15 @@
-// An example config. Copy to config.go and modify to taste.
+/*
+gofoot settings
+
+When processing a message or connecting to a network, settings will be pulled
+from wherever is applicable and most specific. If a setting is set for the
+channel the message was posted in, that channel's settings will be respected,
+then that network's, then the global ones.
+
+The documentation server doesn't run per-network, so it is meaningless to set
+the listen address at anything more specific than globally, and similarly
+network addresses don't mean anything per-channel.
+*/
 
 package main
 
@@ -21,6 +32,8 @@ func GetUserConfig() UserConfig {
 			"lastfm_api_key": "",
 		},
 		network: map[string]map[string]string {
+      // Invoke gofoot with `./gofoot robot [network]`, where [network] is the
+      // string you're specifying here; in this case, it'd be "highway".
 			"highway": map[string]string {
 				"nickserv_password": "sekrit",
 				"address": "irc.irchighway.net:6669",
