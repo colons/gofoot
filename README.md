@@ -1,6 +1,6 @@
 # gofoot
 
-Runs as 'trenchfoot' in #NekoDesu on rizon. among other places.
+Runs as 'trenchfoot' in #NekoDesu on rizon, among other places.
 
 ## Setup
 
