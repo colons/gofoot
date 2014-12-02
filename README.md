@@ -12,7 +12,8 @@ git clone https://github.com/colons/gofoot.git
 cd gofoot
 go get
 cp config.go.example config.go
-nano config.go  # there's some explanation of how config works in this file that is hopefully worth reading
+nano config.go
+# (☝ﾟ∀ﾟ)☝ useful comments in that file
 go build
 ```
 
