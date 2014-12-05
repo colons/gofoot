@@ -32,8 +32,8 @@ func GetUserConfig() UserConfig {
 			"lastfm_api_key": "",
 		},
 		network: map[string]map[string]string {
-      // Invoke gofoot with `./gofoot robot [network]`, where [network] is the
-      // string you're specifying here; in this case, it'd be "highway".
+			// Invoke gofoot with `./gofoot robot [network]`, where [network] is the
+			// string you're specifying here; in this case, it'd be "highway".
 			"highway": map[string]string {
 				"nickserv_password": "sekrit",
 				"address": "irc.irchighway.net:6669",
